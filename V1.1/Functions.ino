@@ -56,8 +56,9 @@ void drawMenu( void )    //отрисовка показаний темпера�
   while (millis() - t <= 10000)
   {
     enc1.tick();
-    if (enc1.isRight() && m != 0)
+    if (enc1.isLeft() && m != 0)
     {
+      //pushSound();
       m -= 2;
       page = (m + 2) / 2;
       lcd.clear();
@@ -109,8 +110,9 @@ void drawMenu( void )    //отрисовка показаний темпера�
         lcd.print(page);
       }
     }
-    if (enc1.isLeft() && m != 46)
+    if (enc1.isRight() && m != 46)
     {
+      //pushSound();
       m += 2;
       page = (m + 2) / 2;
       lcd.clear();
@@ -259,7 +261,7 @@ float getTemp( void )    //функция получения температу�
 void pushSound( void )    //звук пищалки
 {
   tone(BUZ, 400);
-  delay(70);
+  delay(50);
   noTone(BUZ);
 }
 
