@@ -11,17 +11,17 @@
 #define BUZ 5
 #define ONE_WIRE_BUS 10
 #define LED 9
-#define DELTA 1000 //в минутах
+#define DELTA 1      //в минутах
 
 OneWire oneWire(ONE_WIRE_BUS);
 Encoder enc1(CLK, DT, SW);
-LiquidCrystal_I2C lcd(0x27,16,4);
+LiquidCrystal_I2C lcd(0x27,20,4); //16
 DallasTemperature sensors(&oneWire);
 DeviceAddress insideThermometer;
 iarduino_RTC time(RTC_DS1307);
 
-float temp[24], data[24], lTemp;
-int tm[24];
+float temp[24], lTemp;
+int tm[24], data1[24], data2[24];   //сначала месяц и день потом год
 boolean triger = 0, beginning = 0;
 byte symb0[8] = {B01010, B10101, B10001, B10011, B10101, B11001, B10001, B00000}; //Й
 byte symb1[8] = {B10001, B10001, B10011, B10101, B11001, B10001, B10001, B00000}; //И
@@ -57,18 +57,12 @@ void setup() {
   delay(1300);
   lcd.clear();
   time1 = millis();
-  sensors.requestTemperatures();
   lTemp = getTemp();
-  readMas(&temp[0], &data[0], &tm[0]);
+  readMas(&temp[0], &data1[0], &data2[0],&tm[0]);
 }
 
 void loop() {
-  enc1.tick();
-  if (enc1.isLeft() || enc1.isRight())
-  {
-    Serial.println("Scanned!");
-    drawMenu();
-  }
+  catchEnc(0);
   if (triger == 1)      //срабатывание кнопки настройки
   {
     pushSound();
@@ -77,15 +71,17 @@ void loop() {
   }
   if (millis() - time1 >= DELTA * 60000 && getTemp() != -127)   //запись значений
   {
-    moveMas(&temp[0], &data[0], &tm[0]);
+    moveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
     temp[23] = getTemp();
-    data[23]= time.day * 10000 + time.month * 10 + time.year;
+    data1[23] = time.day * 100 + time.month;
+    data2[23] = time.year + 2000;
     tm[23] = time.Hours * 100 + time.minutes; 
-    saveMas(&temp[0], &data[0], &tm[0]);
+    saveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
     time1 = millis();
   }
   else
     if (getTemp() == -127)
       tempError();
+  catchEnc(0);
   printTemp();
 }

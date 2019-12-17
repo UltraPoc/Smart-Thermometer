@@ -1,145 +1,244 @@
+int catchEnc( int inp )    //catchEnc(1)
+{
+  enc1.tick();
+  if ((enc1.isLeft() || enc1.isRight()) && inp != 1)
+  {
+    Serial.println("Scanned!");
+    drawMenu();
+  }
+  else
+    if ((enc1.isLeft() || enc1.isRight()) && inp == 1)
+      return 1;
+}
+
 void drawMenu( void )    //отрисовка показаний температур
 {
-  int m = 0;
+  int m = 0, page;
   unsigned long t = millis();
 
+  page = (page + 2) / 2;
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print((int)(data1[m] / 100));
+  lcd.print("-");
+  lcd.print(data1[m] % 100);
+  lcd.print("-");
+  lcd.print(data2[m]);
+  lcd.print(" ");
+  lcd.print((int)(tm[m] / 100));
+  lcd.print(":");
+  if (tm[m] % 100 < 10)
+    lcd.print(0);
+  lcd.print(tm[m] % 100);
+  lcd.setCursor(0, 1);
+  lcd.print("Temp:");
+  lcd.print(temp[m]);
+  lcd.write(223);
+  lcd.setCursor(0, 2);
+  lcd.print((int)(data1[m + 1] / 100));
+  lcd.print("-");
+  lcd.print(data1[m + 1] % 100);
+  lcd.print("-");
+  lcd.print(data2[m + 1]);
+  lcd.print(" ");
+  lcd.print((int)(tm[m + 1] / 100));
+  lcd.print(":");
+  if (tm[m + 1] % 100 < 10)
+    lcd.print(0);
+  lcd.print(tm[m + 1] % 100);
+  lcd.setCursor(0, 3);
+  lcd.print("Temp:");
+  lcd.print(temp[m + 1]);
+  lcd.write(223);
+  lcd.setCursor(19, 3);  
+  lcd.print(page);
   while (millis() - t <= 10000)
   {
     enc1.tick();
     if (enc1.isRight() && m != 0)
     {
       m -= 2;
+      page = (m + 2) / 2;
       lcd.clear();
       t = millis();
       lcd.setCursor(0, 0);
-      lcd.print((int)(data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print((int)(data1[m] / 100));
       lcd.print("-");
-      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print(data1[m] % 100);
       lcd.print("-");
-      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(data2[m]);
       lcd.print(" ");
       lcd.print((int)(tm[m] / 100));
       lcd.print(":");
+      if (tm[m] % 100 < 10)
+        lcd.print(0);
       lcd.print(tm[m] % 100);
       lcd.setCursor(0, 1);
       lcd.print("Temp:");
       lcd.print(temp[m]);
       lcd.write(223);
       lcd.setCursor(0, 2);
-      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print((int)(data1[m + 1] / 100));
       lcd.print("-");
-      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print(data1[m + 1] % 100);
       lcd.print("-");
-      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(data2[m + 1]);
       lcd.print(" ");
-      lcd.print((int)(tm[m] / 100));
+      lcd.print((int)(tm[m + 1] / 100));
       lcd.print(":");
-      lcd.print(tm[m] % 100);
+      if (tm[m + 1] % 100 < 10)
+        lcd.print(0);
+      lcd.print(tm[m + 1] % 100);
       lcd.setCursor(0, 3);
       lcd.print("Temp:");
-      lcd.print(temp[m]);
+      lcd.print(temp[m + 1]);
       lcd.write(223);
+      if (page < 10)
+      {
+        lcd.setCursor(19, 3);  
+        lcd.print(page);
+      }
+      else
+      {
+        lcd.setCursor(18, 3);
+        lcd.print(page);
+      }
     }
     if (enc1.isLeft() && m != 22)
     {
       m += 2;
+      page = (m + 2) / 2;
       lcd.clear();
       t = millis();
       lcd.setCursor(0, 0);
-      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print((int)(data1[m] / 100));
       lcd.print("-");
-      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print(data1[m] % 100);
       lcd.print("-");
-      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(data2[m]);
       lcd.print(" ");
       lcd.print((int)(tm[m] / 100));
       lcd.print(":");
+      if (tm[m] % 100 < 10)
+        lcd.print(0);
       lcd.print(tm[m] % 100);
       lcd.setCursor(0, 1);
       lcd.print("Temp:");
       lcd.print(temp[m]);
       lcd.write(223);
       lcd.setCursor(0, 2);
-      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print((int)(data1[m + 1] / 100));
       lcd.print("-");
-      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print(data1[m + 1] % 100);
       lcd.print("-");
-      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(data2[m + 1]);
       lcd.print(" ");
-      lcd.print((int)(tm[m] / 100));
+      lcd.print((int)(tm[m + 1] / 100));
       lcd.print(":");
-      lcd.print(tm[m] % 100);
+      if (tm[m + 1] % 100 < 10)
+        lcd.print(0);
+      lcd.print(tm[m + 1] % 100);
       lcd.setCursor(0, 3);
       lcd.print("Temp:");
-      lcd.print(temp[m]);
+      lcd.print(temp[m + 1]);
       lcd.write(223);
+      if (page < 10)
+      {
+        lcd.setCursor(19, 3);  
+        lcd.print(page);
+      }
+      else
+      {
+        lcd.setCursor(18, 3);
+        lcd.print(page);
+      }
     }
 }
   lcd.clear();
 }
-
-void readMas( float *tmp, float *dat, int *tim )    //заполнение массива из памяти
+void readMas( float *tmp, int *dat1, int *dat2,int *tim )    //заполнение массива из памяти
 {
   int i, j;
 
   for (i = 0, j = 0; i < 96; i += 4, j++)
     tmp[j] = eeprom_read_float(i);
-  for (i = 100, j = 0; i < 196; i += 4, j++)
-    dat[j] = eeprom_read_float(i);
-  for (i = 200, j = 0; i < 248; i +=2, j++)
+  for (i = 100, j = 0; i < 148; i += 2, j++)
+    dat1[j] = eeprom_read_word(i);
+  for (i = 200, j = 0; i < 248; i += 2, j++)
+    dat2[j] = eeprom_read_word(i);
+  for (i = 300, j = 0; i < 348; i +=2, j++)
     tim[j] = eeprom_read_word(i);  
 }
 
-void saveMas( float *tmp, float *dat, int *tim )     //сохранение массива в энергонезависимую память
+void saveMas( float *tmp, int *dat1, int *dat2,int *tim )     //сохранение массива в энергонезависимую память
 {
   int i, j;
 
   for (i = 0, j = 0; i < 96; i += 4, j++)
     eeprom_update_float(i, tmp[j]);
-  for (i = 100, j = 0; i < 196; i += 4, j++)
-    eeprom_update_float(i, dat[j]);
-  for (i = 200, j = 0; i < 248; i +=2, j++)
+  for (i = 100, j = 0; i < 148; i += 2, j++)
+    eeprom_update_word(i, dat1[j]);
+  for (i = 200, j = 0; i < 248; i += 2, j++)
+    eeprom_update_word(i, dat2[j]);
+  for (i = 300, j = 0; i < 348; i +=2, j++)
     eeprom_update_word(i, tim[j]);
 }
 
-void moveMas( float *tmp, float *dat, int *tim )    //смещение массива влево
+void moveMas( float *tmp, int *dat1, int *dat2,int *tim )    //смещение массива влево
 {
   int i;
 
   for (i = 0; i < 23; i++)
   {
     tmp[i] = tmp[i + 1];
-    dat[i] = dat[i + 1];
+    dat1[i] = dat1[i + 1];
+    dat2[i] = dat2[i + 1];
     tim[i] = tim[i + 1];
   }  
 }
 
 void printTemp( void ) //функция главного экрана
 {
+  if (catchEnc(1) == 1)
+    return;
   lcd.setCursor(0, 0);
   lcd.print("TEKY");
+  if (catchEnc(1) == 1)
+    drawMenu();
   lcd.write(2);
   lcd.print("A");
+  if (catchEnc(1) == 1)
+    drawMenu();
   lcd.write(3);
   lcd.print(" TEM");
   lcd.write(4);
+  if (catchEnc(1) == 1)
+    drawMenu();
   lcd.print("EPATYPA");
   lcd.setCursor(0, 1);
   lcd.print(time.gettime("d-m-Y H:i"));
+  if (catchEnc(1) == 1)
+    drawMenu();
   lcd.setCursor(0, 2);
   lcd.print("Temp:");
+  if (catchEnc(1) == 1)
+    drawMenu();
   if (lTemp != getTemp())
   {
     lcd.setCursor(11, 2);
     lcd.print("   ");
     lTemp = getTemp();
   }
+  if (catchEnc(1) == 1)
+    drawMenu();
   if (lTemp >= 10 && getTemp() < 10)
   {
     lcd.setCursor(10, 2);
     lcd.print("   ");
     lTemp = getTemp();  
   }
+  if (catchEnc(1) == 1)
+    drawMenu();
   lcd.setCursor(5, 2);
   lcd.print(getTemp());
   lcd.write(223);
