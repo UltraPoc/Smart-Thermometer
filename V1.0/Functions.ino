@@ -215,8 +215,6 @@ void printTemp( void ) //функция главного экрана
   lcd.write(3);
   lcd.print(" TEM");
   lcd.write(4);
-  if (catchEnc(1) == 1)
-    drawMenu();
   lcd.print("EPATYPA");
   lcd.setCursor(0, 1);
   lcd.print(time.gettime("d-m-Y H:i"));
@@ -228,8 +226,6 @@ void printTemp( void ) //функция главного экрана
     lcd.print("   ");
     lTemp = getTemp();
   }
-  if (catchEnc(1) == 1)
-    drawMenu();
   if (lTemp >= 10 && getTemp() < 10)
   {
     lcd.setCursor(10, 2);
