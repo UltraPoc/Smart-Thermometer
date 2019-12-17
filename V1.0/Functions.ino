@@ -1,16 +1,182 @@
-void pushSound( void )
+void drawMenu( void )    //отрисовка показаний температур
+{
+  int m = 0;
+  unsigned long t = millis();
+
+  while (millis() - t <= 10000)
+  {
+    enc1.tick();
+    if (enc1.isRight() && m != 0)
+    {
+      m -= 2;
+      lcd.clear();
+      t = millis();
+      lcd.setCursor(0, 0);
+      lcd.print((int)(data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print("-");
+      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print("-");
+      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(" ");
+      lcd.print((int)(tm[m] / 100));
+      lcd.print(":");
+      lcd.print(tm[m] % 100);
+      lcd.setCursor(0, 1);
+      lcd.print("Temp:");
+      lcd.print(temp[m]);
+      lcd.write(223);
+      lcd.setCursor(0, 2);
+      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print("-");
+      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print("-");
+      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(" ");
+      lcd.print((int)(tm[m] / 100));
+      lcd.print(":");
+      lcd.print(tm[m] % 100);
+      lcd.setCursor(0, 3);
+      lcd.print("Temp:");
+      lcd.print(temp[m]);
+      lcd.write(223);
+    }
+    if (enc1.isLeft() && m != 22)
+    {
+      m += 2;
+      lcd.clear();
+      t = millis();
+      lcd.setCursor(0, 0);
+      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print("-");
+      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print("-");
+      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(" ");
+      lcd.print((int)(tm[m] / 100));
+      lcd.print(":");
+      lcd.print(tm[m] % 100);
+      lcd.setCursor(0, 1);
+      lcd.print("Temp:");
+      lcd.print(temp[m]);
+      lcd.write(223);
+      lcd.setCursor(0, 2);
+      lcd.print((data[m] - (int)data[m] % 10000) / 10000);
+      lcd.print("-");
+      lcd.print(((int)(data[m] - (int)data[m] % 100) / 100) % 100);
+      lcd.print("-");
+      lcd.print((int)data[m] % 100 + 2000);
+      lcd.print(" ");
+      lcd.print((int)(tm[m] / 100));
+      lcd.print(":");
+      lcd.print(tm[m] % 100);
+      lcd.setCursor(0, 3);
+      lcd.print("Temp:");
+      lcd.print(temp[m]);
+      lcd.write(223);
+    }
+}
+  lcd.clear();
+}
+
+void readMas( float *tmp, float *dat, int *tim )    //заполнение массива из памяти
+{
+  int i, j;
+
+  for (i = 0, j = 0; i < 96; i += 4, j++)
+    tmp[j] = eeprom_read_float(i);
+  for (i = 100, j = 0; i < 196; i += 4, j++)
+    dat[j] = eeprom_read_float(i);
+  for (i = 200, j = 0; i < 248; i +=2, j++)
+    tim[j] = eeprom_read_word(i);  
+}
+
+void saveMas( float *tmp, float *dat, int *tim )     //сохранение массива в энергонезависимую память
+{
+  int i, j;
+
+  for (i = 0, j = 0; i < 96; i += 4, j++)
+    eeprom_update_float(i, tmp[j]);
+  for (i = 100, j = 0; i < 196; i += 4, j++)
+    eeprom_update_float(i, dat[j]);
+  for (i = 200, j = 0; i < 248; i +=2, j++)
+    eeprom_update_word(i, tim[j]);
+}
+
+void moveMas( float *tmp, float *dat, int *tim )    //смещение массива влево
+{
+  int i;
+
+  for (i = 0; i < 23; i++)
+  {
+    tmp[i] = tmp[i + 1];
+    dat[i] = dat[i + 1];
+    tim[i] = tim[i + 1];
+  }  
+}
+
+void printTemp( void ) //функция главного экрана
+{
+  lcd.setCursor(0, 0);
+  lcd.print("TEKY");
+  lcd.write(2);
+  lcd.print("A");
+  lcd.write(3);
+  lcd.print(" TEM");
+  lcd.write(4);
+  lcd.print("EPATYPA");
+  lcd.setCursor(0, 1);
+  lcd.print(time.gettime("d-m-Y H:i"));
+  lcd.setCursor(0, 2);
+  lcd.print("Temp:");
+  if (lTemp != getTemp())
+  {
+    lcd.setCursor(11, 2);
+    lcd.print("   ");
+    lTemp = getTemp();
+  }
+  if (lTemp >= 10 && getTemp() < 10)
+  {
+    lcd.setCursor(10, 2);
+    lcd.print("   ");
+    lTemp = getTemp();  
+  }
+  lcd.setCursor(5, 2);
+  lcd.print(getTemp());
+  lcd.write(223);
+}
+
+void tempError( void )   //объявление об ошибке сенсора
+{
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("   SENSOR ERROR!!");
+  ledOn();
+  sensors.requestTemperatures();
+  while (getTemp() == -127)
+    sensors.requestTemperatures();
+  lcd.clear();  
+  ledOff();
+}
+
+float getTemp( void )    //функция получения температуры
+{
+  sensors.requestTemperatures();
+  return sensors.getTempC(insideThermometer);  
+}
+
+void pushSound( void )    //звук пищалки
 {
   tone(BUZ, 400);
   delay(70);
   noTone(BUZ);
 }
 
-void ledOn( void )
+void ledOn( void )     //включение светодиода
 {
   digitalWrite(LED, HIGH);
 }
 
-void ledOff( void )
+void ledOff( void )   //выключение светодиода
 {
   digitalWrite(LED, LOW);
 }
@@ -53,7 +219,7 @@ void PrintTime( int dy, int mnth, int yr, int hr, int mnt, int cln )
     lcd.print(mnt);
 }
 
-byte bissextile( int yr )
+byte bissextile( int yr )  //проверка на високосность
 {
   if (yr % 4 == 0)
     if (yr % 100 != 0)
@@ -64,7 +230,7 @@ byte bissextile( int yr )
   return 0;
 }
 
-byte CheckData( int dy, int mnth, int yr )  //1 если все хорошо 0 если плохо
+byte CheckData( int dy, int mnth, int yr )  //проверка корректности дат (1 если все хорошо 0 если плохо)
 {
   byte days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   
@@ -79,7 +245,7 @@ byte CheckData( int dy, int mnth, int yr )  //1 если все хорошо 0 �
   return 0;
   }
   
-void SetTime( void )
+void SetTime( void )      //функция настройки времени
 {   
     time.gettime();
     int dy = time.day, mnth = time.month, yr = time.year + 2000, hr = time.Hours, mnt = time.minutes, trigger = 1;
