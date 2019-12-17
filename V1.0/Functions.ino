@@ -25,6 +25,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
   lcd.print("-");
   lcd.print(data2[m]);
   lcd.print(" ");
+  if ((int)(tm[m] / 100) < 10)
+    lcd.print(0);
   lcd.print((int)(tm[m] / 100));
   lcd.print(":");
   if (tm[m] % 100 < 10)
@@ -41,6 +43,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
   lcd.print("-");
   lcd.print(data2[m + 1]);
   lcd.print(" ");
+  if ((int)(tm[m + 1] / 100) < 10)
+    lcd.print(0);
   lcd.print((int)(tm[m + 1] / 100));
   lcd.print(":");
   if (tm[m + 1] % 100 < 10)
@@ -68,6 +72,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
       lcd.print("-");
       lcd.print(data2[m]);
       lcd.print(" ");
+      if ((int)(tm[m] / 100) < 10)
+        lcd.print(0);
       lcd.print((int)(tm[m] / 100));
       lcd.print(":");
       if (tm[m] % 100 < 10)
@@ -84,6 +90,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
       lcd.print("-");
       lcd.print(data2[m + 1]);
       lcd.print(" ");
+      if ((int)(tm[m + 1] / 100) < 10)
+        lcd.print(0);
       lcd.print((int)(tm[m + 1] / 100));
       lcd.print(":");
       if (tm[m + 1] % 100 < 10)
@@ -117,6 +125,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
       lcd.print("-");
       lcd.print(data2[m]);
       lcd.print(" ");
+      if ((int)(tm[m] / 100) < 10)
+        lcd.print(0);
       lcd.print((int)(tm[m] / 100));
       lcd.print(":");
       if (tm[m] % 100 < 10)
@@ -133,6 +143,8 @@ void drawMenu( void )    //отрисовка показаний темпера�
       lcd.print("-");
       lcd.print(data2[m + 1]);
       lcd.print(" ");
+      if ((int)(tm[m + 1] / 100) < 10)
+        lcd.print(0);
       lcd.print((int)(tm[m + 1] / 100));
       lcd.print(":");
       if (tm[m + 1] % 100 < 10)

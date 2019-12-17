@@ -11,7 +11,7 @@
 #define BUZ 5
 #define ONE_WIRE_BUS 10
 #define LED 9
-#define DELTA 1      //в минутах
+#define DELTA 5      //в минутах
 
 OneWire oneWire(ONE_WIRE_BUS);
 Encoder enc1(CLK, DT, SW);
