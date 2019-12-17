@@ -2,10 +2,7 @@ int catchEnc( int inp )    //catchEnc(1)
 {
   enc1.tick();
   if ((enc1.isLeft() || enc1.isRight()) && inp != 1)
-  {
-    Serial.println("Scanned!");
     drawMenu();
-  }
   else
     if ((enc1.isLeft() || enc1.isRight()) && inp == 1)
       return 1;
@@ -211,16 +208,10 @@ void moveMas( float *tmp, int *dat1, int *dat2,int *tim )    //смещение 
 
 void printTemp( void ) //функция главного экрана
 {
-  if (catchEnc(1) == 1)
-    return;
   lcd.setCursor(0, 0);
   lcd.print("TEKY");
-  if (catchEnc(1) == 1)
-    drawMenu();
   lcd.write(2);
   lcd.print("A");
-  if (catchEnc(1) == 1)
-    drawMenu();
   lcd.write(3);
   lcd.print(" TEM");
   lcd.write(4);
@@ -229,12 +220,8 @@ void printTemp( void ) //функция главного экрана
   lcd.print("EPATYPA");
   lcd.setCursor(0, 1);
   lcd.print(time.gettime("d-m-Y H:i"));
-  if (catchEnc(1) == 1)
-    drawMenu();
   lcd.setCursor(0, 2);
   lcd.print("Temp:");
-  if (catchEnc(1) == 1)
-    drawMenu();
   if (lTemp != getTemp())
   {
     lcd.setCursor(11, 2);
@@ -249,8 +236,6 @@ void printTemp( void ) //функция главного экрана
     lcd.print("   ");
     lTemp = getTemp();  
   }
-  if (catchEnc(1) == 1)
-    drawMenu();
   lcd.setCursor(5, 2);
   lcd.print(getTemp());
   lcd.write(223);

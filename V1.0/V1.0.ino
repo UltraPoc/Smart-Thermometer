@@ -69,6 +69,7 @@ void loop() {
     SetTime();
     triger = 0;
   }
+  catchEnc(0);
   if (millis() - time1 >= DELTA * 60000 && getTemp() != -127)   //запись значений
   {
     moveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
@@ -84,4 +85,5 @@ void loop() {
       tempError();
   catchEnc(0);
   printTemp();
+  catchEnc(0);
 }
