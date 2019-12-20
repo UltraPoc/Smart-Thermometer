@@ -21,8 +21,8 @@ DallasTemperature sensors(&oneWire);
 DeviceAddress insideThermometer;
 iarduino_RTC time(RTC_DS1307);
 
-float temp[48], lTemp;
-int tm[48], data1[48], data2[48];   //сначала месяц и день потом год
+float temp[72], lTemp;
+int tm[72], data1[72], data2[72];   //сначала месяц и день потом год
 boolean triger = 0, beginning = 0;
 byte symb0[8] = {B01010, B10101, B10001, B10011, B10101, B11001, B10001, B00000}; //Й
 byte symb1[8] = {B10001, B10001, B10011, B10101, B11001, B10001, B10001, B00000}; //И
@@ -42,7 +42,7 @@ void setup() {
   lcd.setCursor(0, 2);
   lcd.print("Loading...");
   lcd.setCursor(0, 3);
-  lcd.print("V1.3");
+  lcd.print("V1.4");
   sensors.setResolution(insideThermometer, 9);
   sensors.getAddress(insideThermometer, 0);
   pinMode(3, INPUT_PULLUP);
@@ -76,10 +76,10 @@ void loop() {
   if (millis() - time1 >= DELTA * 60000 && getTemp() != -127)
   {
     moveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
-    temp[47] = getTemp();
-    data1[47] = time.day * 100 + time.month;
-    data2[47] = time.year + 2000;
-    tm[47] = time.Hours * 100 + time.minutes; 
+    temp[71] = getTemp();
+    data1[71] = time.day * 100 + time.month;
+    data2[71] = time.year + 2000;
+    tm[71] = time.Hours * 100 + time.minutes; 
     saveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
     time1 = millis();
   }
