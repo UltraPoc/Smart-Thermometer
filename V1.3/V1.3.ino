@@ -42,7 +42,7 @@ void setup() {
   lcd.setCursor(0, 2);
   lcd.print("Loading...");
   lcd.setCursor(0, 3);
-  lcd.print("V1.2");
+  lcd.print("V1.3");
   sensors.setResolution(insideThermometer, 9);
   sensors.getAddress(insideThermometer, 0);
   pinMode(3, INPUT_PULLUP);
