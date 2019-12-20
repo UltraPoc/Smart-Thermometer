@@ -12,7 +12,8 @@
 #define ONE_WIRE_BUS 10
 #define LED 9
 #define DELTA 7      //в минутах
-#define UPDATING 3 //в секуднах
+#define UPDATING 4 //в секуднах
+#define DELTA2 2 //в секундах
 
 OneWire oneWire(ONE_WIRE_BUS);
 Encoder enc1(CLK, DT, SW);
@@ -92,5 +93,4 @@ void loop() {
     printTemp();
     time2 = millis();
   }
-  catchEnc(0);
 }

@@ -72,7 +72,7 @@ void drawMenu( void )    //отрисовка показаний темпера�
   unsigned long t = millis();
   
   updateDisplay(m);
-  while (millis() - t <= 10000)
+  while (millis() - t <= DELTA2 * 1000)
   {
     enc1.tick();
     if (enc1.isLeft())
@@ -111,6 +111,7 @@ void drawMenu( void )    //отрисовка показаний темпера�
     }
   }
   lcd.clear();
+  printTemp();
 }
 void readMas( float *tmp, int *dat1, int *dat2,int *tim )    //заполнение массива из памяти
 {
