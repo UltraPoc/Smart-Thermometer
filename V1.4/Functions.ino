@@ -1,3 +1,8 @@
+void reboot( void )
+{
+  asm volatile("jmp 0x00");
+}
+
 void updateDisplay( int m )      //отрисовка показаний
 {
   int page;
@@ -189,13 +194,23 @@ void printTemp( void ) //функция главного экрана
 
 void tempError( void )   //объявление об ошибке сенсора
 {
+  unsigned long t = millis();
+  
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("   SENSOR ERROR!!");
   ledOn();
   sensors.requestTemperatures();
+  pushSound();
   while (getTemp() == -127)
+  {
     sensors.requestTemperatures();
+    if (millis() - t >= BOOP * 1000)
+    {
+      pushSound();
+      t = millis();
+    }
+  }
   lcd.clear();  
   ledOff();
 }

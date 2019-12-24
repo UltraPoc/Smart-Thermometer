@@ -13,7 +13,9 @@
 #define LED 9
 #define DELTA 7      //в минутах
 #define UPDATING 4 //в секуднах
-#define DELTA2 2 //в секундах
+#define DELTA2 2 //в секундах   откат энкодера
+#define REBOOT 30  //время до перезагрузки в днях
+#define BOOP 5 //пищалка в секундах
 
 OneWire oneWire(ONE_WIRE_BUS);
 Encoder enc1(CLK, DT, SW);
@@ -56,7 +58,7 @@ void setup() {
   lcd.createChar(3, symb3);
   lcd.createChar(4, symb4);
   time.begin();
-  delay(1300);
+  delay(1600);
   time1 = millis();
   time2 = millis();
   lTemp = getTemp();
@@ -83,6 +85,8 @@ void loop() {
     tm[71] = time.Hours * 100 + time.minutes; 
     saveMas(&temp[0], &data1[0], &data2[0],&tm[0]);
     time1 = millis();
+    if (millis() >= REBOOT * 86400000)
+      reboot();
   }
     else
       if (getTemp() == -127)
