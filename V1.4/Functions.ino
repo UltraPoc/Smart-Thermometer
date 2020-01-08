@@ -10,8 +10,12 @@ void updateDisplay( int m )      //отрисовка показаний
   page = (m + 2) / 2;
   lcd.clear();
   lcd.setCursor(0, 0);
+  if ((int)(data1[m] / 100) < 10)  //
+    lcd.print(0);
   lcd.print((int)(data1[m] / 100));
   lcd.print("-");
+  if (data1[m] % 100 < 10)
+    lcd.print(0);
   lcd.print(data1[m] % 100);
   lcd.print("-");
   lcd.print(data2[m]);
@@ -30,8 +34,12 @@ void updateDisplay( int m )      //отрисовка показаний
   lcd.print(temp[m]);
   lcd.write(223);
   lcd.setCursor(0, 2);
+  if ((int)(data1[m + 1] / 100) < 10)
+    lcd.print(0);
   lcd.print((int)(data1[m + 1] / 100));
   lcd.print("-");
+  if (data1[m + 1] % 100 < 10)
+    lcd.print(0);
   lcd.print(data1[m + 1] % 100);
   lcd.print("-");
   lcd.print(data2[m + 1]);

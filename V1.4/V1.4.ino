@@ -11,9 +11,9 @@
 #define BUZ 5
 #define ONE_WIRE_BUS 10
 #define LED 9
-#define DELTA 7      //в минутах
+#define DELTA 60      //в минутах
 #define UPDATING 4 //в секуднах
-#define DELTA2 2 //в секундах   откат энкодера
+#define DELTA2 12 //в секундах   откат энкодера
 #define REBOOT 30  //время до перезагрузки в днях
 #define BOOP 5 //пищалка в секундах
 
