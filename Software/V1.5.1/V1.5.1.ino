@@ -70,6 +70,7 @@ void setup() {
     eeprom_update_byte(900, 0);
   time1 = millis();
   time2 = millis();
+  delay(1500);
   temp[0] = getTemp();
   temp[1] = getTemp();
   lTemp = quadVal(temp[0], temp[1]);
@@ -77,6 +78,9 @@ void setup() {
   readMas(&data1[0], &data2[0],&tm[0]);
   lcd.clear();
   printTemp();
+  printTemp();
+  printTemp();
+  delay(200);
   printTemp();
 }
 
