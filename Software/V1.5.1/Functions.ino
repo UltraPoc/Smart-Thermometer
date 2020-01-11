@@ -213,6 +213,10 @@ void tempError( void )   //объявление об ошибке сенсора
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("   SENSOR ERROR!!");
+  lcd.setCursor(0, 1);
+  lcd.print("Since ");
+  lcd.setCursor(0, 2);
+  lcd.print(time.gettime("d-m-Y H:i"));
   ledOn();
   sensors.requestTemperatures();
   pushSound();
@@ -227,6 +231,7 @@ void tempError( void )   //объявление об ошибке сенсора
   }
   lcd.clear();  
   ledOff();
+  printTemp();
 }
 
 float getTemp( void )    //функция получения температуры
