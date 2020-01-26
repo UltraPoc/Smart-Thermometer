@@ -1,11 +1,22 @@
-float quadVal( float a, float b )
+void Interrupts( void )
 {
-  return sqrt((a * a + b * b) * 0.5);
+  detachInterrupt(0);
+  delay(5);
+  attachInterrupt(0, isr, CHANGE);
+}
+
+float quadVal( float a, float b, float c, float d )
+{
+  if (d < 0)
+    return -sqrt((a * a + b * b + c * c + d * d) * 0.25);
+  else 
+    return sqrt((a * a + b * b + c * c + d * d) * 0.25);
 }
 
 void isr( void )   //"пинок" энкодеру
 {
   encFlag = 1;
+  //ledOn();
 }
 
 void reboot( void )    //перезагрузка микроконтроллера
@@ -171,7 +182,9 @@ void moveMas( int *dat1, int *dat2,int *tim )    //смещение массив
 void printTemp( void ) //функция главного экрана
 {
   temp[0] = temp[1];
-  temp[1] = getTemp();
+  temp[1] = temp[2];
+  temp[2] = temp[3];
+  temp[3] = getTemp();
   lcd.setCursor(0, 0);
   lcd.print("TEKY");
   lcd.write(2);
@@ -186,23 +199,31 @@ void printTemp( void ) //функция главного экрана
   lcd.print("TEM");
   lcd.write(4);
   lcd.print(":");
-  if (lTemp != quadVal(temp[0], temp[1]))
-  {
-    lcd.setCursor(11, 2);
-    lcd.print("   ");
-    //lTemp = getTemp();
-    lTemp = quadVal(temp[0], temp[1]);
-  }
-  if (lTemp >= 10 && quadVal(temp[0], temp[1]) < 10)
+  if (lTemp < 0 && quadVal(temp[0], temp[1], temp[2], temp[3]) >= 0)
   {
     lcd.setCursor(10, 2);
     lcd.print("   ");
-    //lTemp = getTemp(); 
-    lTemp = quadVal(temp[0], temp[1]); 
-  }
+    lTemp = quadVal(temp[0], temp[1], temp[2], temp[3]);
+  } 
+  else
+    if (lTemp >= 10 && quadVal(temp[0], temp[1], temp[2], temp[3]) < 10)
+    {
+      lcd.setCursor(10, 2);
+      lcd.print("   ");
+      //lTemp = getTemp(); 
+      lTemp = quadVal(temp[0], temp[1], temp[2], temp[3]); 
+    }
+    else
+      if (lTemp != quadVal(temp[0], temp[1], temp[2], temp[3]))
+      {
+        lcd.setCursor(11, 2);
+        lcd.print("   ");
+        //lTemp = getTemp();
+        lTemp = quadVal(temp[0], temp[1], temp[2], temp[3]);
+      }
   lcd.setCursor(5, 2);
   //lcd.print(getTemp()); 
-  lcd.print(quadVal(temp[0], temp[1]));
+  lcd.print(quadVal(temp[0], temp[1], temp[2], temp[3]));
   lcd.write(223);
 }
 
@@ -326,12 +347,12 @@ void Settings( void )      //функция настройки времени
     time.gettime();
     int dy = time.day, mnth = time.month, yr = time.year + 2000, hr = time.Hours, mnt = time.minutes, trigger = 1;
 
-    detachInterrupt(0);
     if (beginning == 0)
     {
       beginning = 1;
       return;
-    }
+    } 
+    detachInterrupt(0);
     PrintTime(dy, mnth, yr, hr, mnt, 0);
     while (trigger != 6) 
     {
